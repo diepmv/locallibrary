@@ -12,7 +12,9 @@ class Book(models.Model):
   title = models.CharField(max_length=200)
   author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
   summary = models.TextField(max_length=1000, help_text="Enter brief description of the book")
-  isbn = models.CharField("ISBN", max_length=13, help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
+  isbn = models.CharField("ISBN",
+                          max_length=13,
+                          help_text='13 Character <a href="https://www.isbn-international.org/content/what-isbn">ISBN number</a>')
   genre = models.ManyToManyField(Genre, help_text="Select a genre for this book")
 
   def __str__(self):
@@ -26,7 +28,9 @@ class Book(models.Model):
   display_genre.short_description = 'Genre'
 
 class BookInstance(models.Model):
-  id = models.UUIDField(primary_key=True, default=uuid.uuid4,help_text="Unique ID for this particular book across whole library")
+  id = models.UUIDField(primary_key=True,
+                        default=uuid.uuid4,
+                        help_text="Unique ID for this particular book across whole library")
   book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
   imprint = models.CharField(max_length=200)
   due_back = models.DateField(null=True, blank=True)
@@ -38,7 +42,11 @@ class BookInstance(models.Model):
     ('r', 'Reserved'),
   )
   
-  status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m', help_text='Book availability')
+  status = models.CharField(max_length=1,
+                            choices=LOAN_STATUS,
+                            blank=True,
+                            default='m',
+                            help_text='Book availability')
   
   class Meta:
     ordering = ['due_back']
