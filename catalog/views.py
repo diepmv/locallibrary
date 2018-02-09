@@ -5,10 +5,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, Http404
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Create your views here.
 
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+
   model = BookInstance
   template_name = 'catalog/bookinstance_list_borrowed_user.html'
   paginate_by = 10
@@ -59,42 +62,3 @@ class BookDetailView(LoginRequiredMixin, generic.DetailView):
     #   print(request.session.items())
     #   return HttpResponse("asdadw")
 
-
-def __add__(self, other):
-      if isinstance(other, timedelta):
-          # for CPython compatibility, we cannot use
-          # our __class__ here, but need a real timedelta
-          return timedelta(self._days + other._days,
-                           self._seconds + other._seconds,
-                           self._microseconds + other._microseconds)
-      return NotImplemented
-
-
-def __add__(self, other):
-    "Add a date to a timedelta."
-    if isinstance(other, timedelta):
-        o = self.toordinal() + other.days
-        if 0 < o <= _MAXORDINAL:
-            return date.fromordinal(o)
-        raise OverflowError("result out of range")
-    return NotImplemented
-
-def __add__(self, other):
-  "Add a datetime and a timedelta."
-
-  if not isinstance(other, timedelta):
-    return NotImplemented
-  delta = timedelta(self.toordinal(),
-                    hours=self._hour,
-                    minutes=self._minute,
-                    seconds=self._second,
-                    microseconds=self._microsecond)
-  delta += other
-  hour, rem = divmod(delta.seconds, 3600)
-  minute, second = divmod(rem, 60)
-  if 0 < delta.days <= _MAXORDINAL:
-    return datetime.combine(date.fromordinal(delta.days),
-                            time(hour, minute, second,
-                                 delta.microseconds,
-                                 tzinfo=self._tzinfo))
-  raise OverflowError("result out of range")
